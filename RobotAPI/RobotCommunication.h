@@ -6,6 +6,7 @@
 
 #include "utility/IRremote.h"
 #include "IrCommunication.h"
+#include "Arduino.h"
 
 
 class RobotCommunication {

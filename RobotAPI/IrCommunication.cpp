@@ -16,16 +16,18 @@ bool IrCommunication::sendMessageACK(uint16_t data) {
 
 uint16_t IrCommunication::reveiveMessage(IRrecv *recv) {
         decode_results results;
+		//Serial.println("start decoring");
+		uint16_t output = -1;//Can't decord message
         if(recv->decode(&results)){
              if(results.bits >12){
-                     return 5000;//message corrupted
+                     output = -2;//message corrupted
              }else{
-                     recv->resume();
-					 Serial.println(results.value,HEX);
-                     return results.value;
+                     
+                     output = results.value;
              }
         }
-
-        return 5001;//Can't decord message
+		recv->resume();
+		Serial.println(results.value,HEX);
+        return output;
 }
 

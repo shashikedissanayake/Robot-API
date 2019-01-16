@@ -6,7 +6,8 @@
 //----receiver pins---------------------//
 uint8_t RCV_0 = 7;
 uint8_t RCV_1 = 8;
-uint8_t RCV_2 = 9;
+uint8_t RCV_2 = 10;
+uint8_t RCV_3 = 11;
 
 
 //----operation codes for communication----//
@@ -31,7 +32,7 @@ const int ACK = 0x00FF;
 //#include <ctime>
 
 // variables that are use both ISR and RobotCommunication Class
-const int RCV_COUNT = 3;
+const int RCV_COUNT = 1;
 IRrecv* recvs[RCV_COUNT];
 IrCommunication communicater;
 uint16_t data[RCV_COUNT];
@@ -41,9 +42,10 @@ volatile static bool read;
 RobotCommunication::RobotCommunication() {
 	Serial.println("Initializing");
 	
-    recvs[0] = new IRrecv(RCV_0);
-    recvs[1] = new IRrecv(RCV_1);
-    recvs[2] = new IRrecv(RCV_2);
+    //recvs[0] = new IRrecv(RCV_0);
+    //recvs[1] = new IRrecv(RCV_1);
+    recvs[0] = new IRrecv(RCV_2);
+	//recvs[3] = new IRrecv(RCV_3);
 
     enableReceivers();
 }
@@ -92,6 +94,8 @@ void RobotCommunication::receiveMessages() {
 ISR(TIMER1_COMPA_vect){
 	read = true;
       for(int i=0;i<RCV_COUNT;i++){
+		  Serial.print("Pin:");
+		  Serial.print(i);
 		  uint16_t val = communicater.reveiveMessage(recvs[i]);
             switch(val){
 				case 5000:
